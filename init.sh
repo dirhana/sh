@@ -31,6 +31,7 @@ check_debian() {
 # 检查是否是 Arch 系统
 check_arch() {
 if grep -qi "arch" /etc/os-release; then
+  ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
   echo "当前系统是 Arch Linux 系统。"
 else
   echo "当前系统不是 Arch Linux 系统。脚本中止。"
@@ -326,3 +327,4 @@ set_hostname
 create_reboot_timer
 }
 main "$@"
+reboot
