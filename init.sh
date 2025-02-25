@@ -256,7 +256,6 @@ if [ -n "$hostname_param" ]; then
   echo "设置主机名为: $hostname_param"
   hostnamectl set-hostname "$hostname_param"
   sed -i "s/127.0.1.1.*/127.0.1.1 $hostname_param/" /etc/hosts
-  exec bash
 else
     echo "没有提供主机名参数，跳过主机名设置。"
 fi
