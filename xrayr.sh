@@ -205,7 +205,7 @@ deploy_xrayr(){
 	> docker-compose.yml
 	printf "%s\n"                                   \
 	"Log:"                                          \
-	"  Level: info"                                 \
+	"  Level: error"                                 \
 	""                                              \
 	"DnsConfigPath: /etc/XrayR/dns.json"            \
 	"RouteConfigPath: /etc/XrayR/route.json"        \
