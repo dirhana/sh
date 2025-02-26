@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ALLOWED_OPTIONS="name panel_type api_host api_key node_id node_type dns cert_node cert_domain cert_file_url cert_key_url dns_provider email CLOUDFLARE_EMAIL CLOUDFLARE_API_KEY_FILE"
+ALLOWED_OPTIONS="name panel_type api_host api_key node_id node_type dns cert_node cert_domain cert_file_url key_file_url dns_provider email CLOUDFLARE_EMAIL CLOUDFLARE_API_KEY_FILE"
 REQUIRED_OPTIONS="name panel_type api_host api_key node_id node_type"
 
 DEPLOY_BASEDIR="/opt"
@@ -287,13 +287,34 @@ deploy_xrayr(){
 
 	if [ -n "$dns" ] && printf '%s' "$dns" | grep -Eq '^(([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'; then
 		echo "有效的DNS: $dns"
-	yq eval ".servers = [\"$dns\"]" -i config/dns.json
+		yq eval ".servers = [\"$dns\"]" -i config/dns.json
 	else
 		echo "DNS为空或格式不正确"
 	fi
-  
-	wget -q https://github.com/v2fly/geoip/releases/latest/download/geoip.dat -O config/geoip.dat
-	wget -q https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat -O config/geosite.dat
+	if [ -n "$cert_node" ]; then
+		yq eval ".Nodes[].CertConfig.CertMode = \"$cert_node\"" -i config/config.yaml
+	fi
+	if [ -n "$cert_domain" ]; then
+		yq eval ".Nodes[].CertConfig.CertDomain = \"$cert_domain\"" -i config/config.yaml
+	fi
+	if [ -n "$dns_provider" ]; then
+		yq eval ".Nodes[].CertConfig.Provider = \"$dns_provider\"" -i config/config.yaml
+	fi
+	if [ -n "$email" ]; then
+		yq eval ".Nodes[].CertConfig.CertMode = \"$email\"" -i config/config.yaml
+	fi
+	if [ -n "$CLOUDFLARE_EMAIL" ] && [ -n "$CLOUDFLARE_API_KEY_FILE" ]; then
+		yq eval ".Nodes[].CertConfig.DNSEnv.CLOUDFLARE_EMAIL = \"$CLOUDFLARE_EMAIL\"" -i config/config.yaml
+        yq eval ".Nodes[].CertConfig.DNSEnv.CLOUDFLARE_API_KEY_FILE = \"$CLOUDFLARE_API_KEY_FILE\"" -i config/config.yaml
+	fi
+	if [ -n "$cert_file_url" ] && [ -n "$key_file_url" ]; then
+        wget -q $cert_file_url -O cert/ssl.crt >/dev/null 2>&1
+        wget -q $key_file_url -O cert/ssl.key >/dev/null 2>&1
+		yq eval ".Nodes[].CertConfig.CertFile = /etc/cert/ssl.crt" -i config/config.yaml
+        yq eval ".Nodes[].CertConfig.KeyFile = /etc/cert/ssl.key" -i config/config.yaml
+	fi
+	wget -q https://github.com/v2fly/geoip/releases/latest/download/geoip.dat -O config/geoip.dat >/dev/null 2>&1
+	wget -q https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat -O config/geosite.dat >/dev/null 2>&1
 	docker compose down >/dev/null 2>&1
 	docker compose up -d
 }
