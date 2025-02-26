@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ALLOWED_OPTIONS="name panel_type api_host api_key node_id node_type dns"
+ALLOWED_OPTIONS="name panel_type api_host api_key node_id node_type dns cert_node cert_domain cert_file_url cert_key_url dns_provider email CLOUDFLARE_EMAIL CLOUDFLARE_API_KEY_FILE"
 REQUIRED_OPTIONS="name panel_type api_host api_key node_id node_type"
 
 DEPLOY_BASEDIR="/opt"
