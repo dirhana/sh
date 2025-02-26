@@ -306,13 +306,13 @@ deploy_xrayr(){
 	fi
 	if [ -n "$CLOUDFLARE_EMAIL" ] && [ -n "$CLOUDFLARE_API_KEY_FILE" ]; then
 		yq eval ".Nodes[].ControllerConfig.CertConfig.DNSEnv.CLOUDFLARE_EMAIL = \"$CLOUDFLARE_EMAIL\"" -i config/config.yaml
-        yq eval ".Nodes[].ControllerConfig.CertConfig.DNSEnv.CLOUDFLARE_API_KEY_FILE = \"$CLOUDFLARE_API_KEY_FILE\"" -i config/config.yaml
+		yq eval ".Nodes[].ControllerConfig.CertConfig.DNSEnv.CLOUDFLARE_API_KEY_FILE = \"$CLOUDFLARE_API_KEY_FILE\"" -i config/config.yaml
 	fi
 	if [ -n "$cert_file_url" ] && [ -n "$key_file_url" ]; then
-        wget -q $cert_file_url -O cert/ssl.crt >/dev/null 2>&1
-        wget -q $key_file_url -O cert/ssl.key >/dev/null 2>&1
-	yq eval ".Nodes[].ControllerConfig.CertConfig.CertFile = \"/etc/cert/ssl.crt\"" -i config/config.yaml
-        yq eval ".Nodes[].ControllerConfig.CertConfig.KeyFile = \"/etc/cert/ssl.key\"" -i config/config.yaml
+		wget -q $cert_file_url -O cert/ssl.crt >/dev/null 2>&1
+		wget -q $key_file_url -O cert/ssl.key >/dev/null 2>&1
+		yq eval ".Nodes[].ControllerConfig.CertConfig.CertFile = \"/etc/cert/ssl.crt\"" -i config/config.yaml
+		yq eval ".Nodes[].ControllerConfig.CertConfig.KeyFile = \"/etc/cert/ssl.key\"" -i config/config.yaml
 	fi
 	wget -q https://github.com/v2fly/geoip/releases/latest/download/geoip.dat -O config/geoip.dat >/dev/null 2>&1
 	wget -q https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat -O config/geosite.dat >/dev/null 2>&1
