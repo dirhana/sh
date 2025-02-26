@@ -168,9 +168,9 @@ install_yq() {
     echo "检测到最新 yq 版本：$LATEST_YQ_VERSION"
     YQ_URL="https://github.com/mikefarah/yq/releases/download/${LATEST_YQ_VERSION}/yq_linux_amd64"
     if command -v curl >/dev/null 2>&1; then
-        curl -L -o /usr/bin/yq "$YQ_URL"
+        curl -L -o /usr/bin/yq "$YQ_URL" >/dev/null 2>&1
     elif command -v wget >/dev/null 2>&1; then
-        wget -O /usr/bin/yq "$YQ_URL"
+        wget -O /usr/bin/yq "$YQ_URL" >/dev/null 2>&1
     fi
 
     chmod +x /usr/bin/yq
