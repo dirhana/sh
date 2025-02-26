@@ -1,7 +1,7 @@
 #!/bin/sh
 
-ALLOWED_OPTIONS="name panel_type api_host api_key node_id node_type dns cert_mode cert_domain cert_file_url key_file_url dns_provider email CLOUDFLARE_EMAIL CLOUDFLARE_API_KEY_FILE"
-REQUIRED_OPTIONS="name panel_type api_host api_key node_id node_type"
+ALLOWED_OPTIONS="name panel_type api_host api_key node_id node_type proxy_protocol dns cert_mode cert_domain cert_file_url key_file_url dns_provider email CLOUDFLARE_EMAIL CLOUDFLARE_API_KEY_FILE"
+REQUIRED_OPTIONS="name panel_type api_host api_key node_id node_type proxy_protocol"
 
 DEPLOY_BASEDIR="/opt"
 
@@ -236,6 +236,7 @@ deploy_xrayr(){
 	"      UpdatePeriodic: 60"                      \
 	"      EnableDNS: true"                         \
 	"      DNSType: UseIPv4"                        \
+	"      EnableProxyProtocol: $proxy_protocol"    \
 	> config/config.yaml
 	printf "%s\n"                                   \
 	"{"                                             \
