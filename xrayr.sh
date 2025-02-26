@@ -293,16 +293,16 @@ deploy_xrayr(){
 		echo "DNS为空或格式不正确"
 	fi
 	if [ -n "$cert_mode" ]; then
-		yq eval ".Nodes[].CertConfig.CertMode = \"$cert_mode\"" -i config/config.yaml
+		yq eval ".Nodes[].ControllerConfig.CertConfig.CertMode = \"$cert_mode\"" -i config/config.yaml
 	fi
 	if [ -n "$cert_domain" ]; then
-		yq eval ".Nodes[].CertConfig.CertDomain = \"$cert_domain\"" -i config/config.yaml
+		yq eval ".Nodes[].ControllerConfig.CertConfig.CertDomain = \"$cert_domain\"" -i config/config.yaml
 	fi
 	if [ -n "$dns_provider" ]; then
-		yq eval ".Nodes[].CertConfig.Provider = \"$dns_provider\"" -i config/config.yaml
+		yq eval ".Nodes[].ControllerConfig.CertConfig.Provider = \"$dns_provider\"" -i config/config.yaml
 	fi
 	if [ -n "$email" ]; then
-		yq eval ".Nodes[].CertConfig.Email = \"$email\"" -i config/config.yaml
+		yq eval ".Nodes[].ControllerConfig.CertConfig.Email = \"$email\"" -i config/config.yaml
 	fi
 	if [ -n "$CLOUDFLARE_EMAIL" ] && [ -n "$CLOUDFLARE_API_KEY_FILE" ]; then
 		yq eval ".Nodes[].ControllerConfig.CertConfig.DNSEnv.CLOUDFLARE_EMAIL = \"$CLOUDFLARE_EMAIL\"" -i config/config.yaml
