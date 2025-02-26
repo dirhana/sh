@@ -281,7 +281,7 @@ deploy_xrayr(){
 	"]"                                             \
 	> config/outbound.json
 	printf "%s\n"                                   \
-	""                                              \
+	"360"                                              \
 	> config/rulelist
 
 	if [ -n "$dns" ] && printf '%s' "$dns" | grep -Eq '^(([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'; then
