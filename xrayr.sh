@@ -234,6 +234,7 @@ deploy_xrayr(){
 	"      UpdatePeriodic: 60"                      \
 	"      EnableDNS: true"                         \
 	"      DNSType: UseIPv4"                        \
+ 	"      DisableSniffing: true"                   \
 	"      EnableProxyProtocol: $proxy_protocol"    \
 	> config/config.yaml
 	printf "%s\n"                                   \
