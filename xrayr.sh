@@ -294,7 +294,7 @@ deploy_xrayr(){
   
 	wget -q https://github.com/v2fly/geoip/releases/latest/download/geoip.dat -O config/geoip.dat
 	wget -q https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat -O config/geosite.dat
-	docker compose down
+	docker compose down >/dev/null 2>&1
 	docker compose up -d
 }
 
