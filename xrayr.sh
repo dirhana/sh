@@ -287,7 +287,7 @@ deploy_xrayr(){
 
 	if [ -n "$dns" ] && printf '%s' "$dns" | grep -Eq '^(([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'; then
 		echo "有效的DNS: $dns"
-    yq eval ".servers = [\"$dns\"]" -i dns.json
+	yq eval ".servers = [\"$dns\"]" -i config/dns.json
 	else
 		echo "DNS为空或格式不正确"
 	fi
