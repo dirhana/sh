@@ -206,8 +206,6 @@ deploy_xrayr(){
 	printf "%s\n"                                   \
 	"Log:"                                          \
 	"  Level: info"                                 \
-	"  AccessPath: /log/access.log"                 \
-	"  ErrorPath: /log/error.log"                   \
 	""                                              \
 	"DnsConfigPath: /etc/XrayR/dns.json"            \
 	"RouteConfigPath: /etc/XrayR/route.json"        \
