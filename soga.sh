@@ -110,6 +110,7 @@ soga_key=$soga_key
 server_type=$server_type
 node_id=$node_id
 listen=$listen
+auto_out_ip=true
 check_interval=15
 default_dns=1.1.1.1,1.0.0.1
 proxy_protocol=true
@@ -134,6 +135,12 @@ dy_limit_speed=100
 dy_limit_time=1800
 block_list_url=https://raw.githubusercontent.com/monatrople/rulelist/refs/heads/main/blockList
 EOF
+
+    if [ -z "$listen" ]; then
+      sed -i '/^listen=$/d' your_file.txt
+    fi
+
+
 
     # Add optional cert and DNS parameters
     if [ ! -z "$cert_domain" ]; then
