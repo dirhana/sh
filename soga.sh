@@ -13,6 +13,7 @@ dns_provider=""
 DNS_CF_Email=""
 DNS_CF_Key=""
 cert_url=""
+listen=""
 
 # 解析命令行参数
 for arg in "$@"
@@ -63,6 +64,9 @@ do
         cert_url=*)
             cert_url="${arg#*=}"
             ;;
+        listen=*)
+            listen="${arg#*=}"
+            ;;
     esac
 done
 
@@ -105,6 +109,7 @@ webapi_key=$webapi_key
 soga_key=$soga_key
 server_type=$server_type
 node_id=$node_id
+listen=$listen
 check_interval=15
 default_dns=1.1.1.1,1.0.0.1
 proxy_protocol=true
