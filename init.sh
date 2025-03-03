@@ -62,7 +62,6 @@ systemctl restart systemd-timesyncd
 configure_sysctl() {
 rm -rf /etc/sysctl.conf
 rm -rf /etc/sysctl.d/*
-ln -s /etc/sysctl.d/99-custom.conf /etc/sysctl.conf
 cat <<EOF >/etc/sysctl.d/99-custom.conf
 fs.file-max = 1000000
 fs.inotify.max_user_instances = 131072
@@ -121,6 +120,7 @@ net.netfilter.nf_conntrack_tcp_timeout_close_wait = 15
 net.netfilter.nf_conntrack_tcp_timeout_established = 300
 vm.swappiness = 40
 EOF
+ln -s /etc/sysctl.d/99-custom.conf /etc/sysctl.conf
 
 total_memory=$(grep MemTotal /proc/meminfo | awk '{print $2}')
 total_memory_bytes=$((total_memory * 1024))
