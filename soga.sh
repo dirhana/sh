@@ -137,11 +137,8 @@ block_list_url=https://raw.githubusercontent.com/monatrople/rulelist/refs/heads/
 EOF
 
     if [ -z "$listen" ]; then
-      sed -i '/^listen=$/d' your_file.txt
+      sed -i '/^listen=$/d' .env
     fi
-
-
-
     # Add optional cert and DNS parameters
     if [ ! -z "$cert_domain" ]; then
         echo "cert_domain=$cert_domain" >> .env
