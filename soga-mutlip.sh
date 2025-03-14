@@ -1,5 +1,5 @@
 #!/bin/bash
-ALLOWED_OPTIONS="start_index end_index name webapi_url webapi_key server_type node_id soga_key routes_url cert_domain cert_mode dns_provider DNS_CF_Email DNS_CF_Key cert_url listen"
+ALLOWED_OPTIONS="start_index end_index name webapi_url webapi_key server_type node_id soga_key routes_url cert_domain cert_mode dns_provider DNS_CF_Email DNS_CF_Key cert_url"
 REQUIRED_OPTIONS=""
 usage() {
     echo "用法: $0 [选项]"
@@ -59,12 +59,12 @@ if [[ -n "$start_index" && -n "$end_index" ]]; then
     for ip in "${ip_list[@]}"; do
         index=$((index + 1))
         if (( index >= start_index && index <= end_index )); then
-            bash <(curl -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/soga.sh') name=$name-$index webapi_url=$webapi_url webapi_key=$webapi_key server_type=$server_type soga_key=$soga_key node_id=$node_id routes_url=$routes_url listen=$listen
+            bash <(curl -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/soga.sh') name=$name-$index webapi_url=$webapi_url webapi_key=$webapi_key server_type=$server_type soga_key=$soga_key node_id=$node_id routes_url=$routes_url listen=$ip
         fi
     done
 else
     for ip in "${ip_list[@]}"; do
         index=$((index + 1))
-            bash <(curl -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/soga.sh') name=$name-$index webapi_url=$webapi_url webapi_key=$webapi_key server_type=$server_type soga_key=$soga_key node_id=$node_id routes_url=$routes_url listen=$listen
+            bash <(curl -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/soga.sh') name=$name-$index webapi_url=$webapi_url webapi_key=$webapi_key server_type=$server_type soga_key=$soga_key node_id=$node_id routes_url=$routes_url listen=$ip
     done
 fi
