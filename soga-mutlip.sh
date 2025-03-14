@@ -60,14 +60,11 @@ if [[ -n "$start_index" && -n "$end_index" ]]; then
         index=$((index + 1))
         if (( index >= start_index && index <= end_index )); then
             echo 'bash <(curl -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/soga.sh') name=\"$name-$index\" webapi_url=$webapi_url webapi_key=$webapi_key server_type=$server_type soga_key=$soga_key node_id=$node_id routes_url=$routes_url listen=$ip'
-
-            bash <(curl -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/soga.sh') name="$name-$index" webapi_url=$webapi_url webapi_key=$webapi_key server_type=$server_type soga_key=$soga_key node_id=$node_id routes_url=$routes_url listen=$ip
         fi
     done
 else
     for ip in "${ip_list[@]}"; do
         index=$((index + 1))
             echo 'bash <(curl -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/soga.sh') name="$name-$index" webapi_url=$webapi_url webapi_key=$webapi_key server_type=$server_type soga_key=$soga_key node_id=$node_id routes_url=$routes_url listen=$ip'
-            bash <(curl -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/soga.sh') name="$name-$index" webapi_url=$webapi_url webapi_key=$webapi_key server_type=$server_type soga_key=$soga_key node_id=$node_id routes_url=$routes_url listen=$ip
     done
 fi
