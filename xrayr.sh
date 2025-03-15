@@ -189,7 +189,7 @@ deploy_xrayr(){
 	if [ -z "$listen" ]; then
 		listen="0.0.0.0"
 	fi
- 	rm -r $DEPLOY_BASEDIR/$name
+ 	rm -rf $DEPLOY_BASEDIR/$name
 	mkdir -p $DEPLOY_BASEDIR/$name/config
 	mkdir -p $DEPLOY_BASEDIR/$name/cert
 	mkdir -p $DEPLOY_BASEDIR/$name/log
