@@ -1,4 +1,4 @@
-ALLOWED_OPTIONS="start_index end_index name panel_type api_host api_key node_id node_type proxy_protocol dns cert_mode cert_domain cert_file_url key_file_url dns_provider email CLOUDFLARE_EMAIL CLOUDFLARE_API_KEY_FILE"
+ALLOWED_OPTIONS="start_index end_index name panel_type api_host api_key node_id node_type proxy_protocol dns cert_mode cert_domain cert_file_url key_file_url dns_provider email CLOUDFLARE_EMAIL CLOUDFLARE_API_KEY_FILE listenip"
 REQUIRED_OPTIONS=""
 usage() {
     echo "用法: $0 [选项]"
@@ -58,12 +58,12 @@ if [[ -n "$start_index" && -n "$end_index" ]]; then
     for ip in "${ip_list[@]}"; do
         index=$((index + 1))
         if (( index >= start_index && index <= end_index )); then
-            bash <(curl -s -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/xrayr.sh') -name "$name-$index" -panel_type $panel_type -api_host $api_host -api_key $api_key -node_id $node_id -node_type $node_type -proxy_protocol $proxy_protocol -dns $dns -cert_mode $cert_mode -cert_domain $cert_domain -cert_file_url $cert_file_url -key_file_url $key_file_url -dns_provider $dns_provider -email $email -CLOUDFLARE_EMAIL $CLOUDFLARE_EMAIL -CLOUDFLARE_API_KEY_FILE $CLOUDFLARE_API_KEY_FILE
+            bash <(curl -s -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/xrayr.sh') -listenip $ip -name "$name-$index" -panel_type $panel_type -api_host $api_host -api_key $api_key -node_id $node_id -node_type $node_type -proxy_protocol $proxy_protocol -dns $dns -cert_mode $cert_mode -cert_domain $cert_domain -cert_file_url $cert_file_url -key_file_url $key_file_url -dns_provider $dns_provider -email $email -CLOUDFLARE_EMAIL $CLOUDFLARE_EMAIL -CLOUDFLARE_API_KEY_FILE $CLOUDFLARE_API_KEY_FILE
         fi
     done
 else
     for ip in "${ip_list[@]}"; do
         index=$((index + 1))
-        bash <(curl -s -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/xrayr.sh') -name "$name-$index" -panel_type $panel_type -api_host $api_host -api_key $api_key -node_id $node_id -node_type $node_type -proxy_protocol $proxy_protocol -dns $dns -cert_mode $cert_mode -cert_domain $cert_domain -cert_file_url $cert_file_url -key_file_url $key_file_url -dns_provider $dns_provider -email $email -CLOUDFLARE_EMAIL $CLOUDFLARE_EMAIL -CLOUDFLARE_API_KEY_FILE $CLOUDFLARE_API_KEY_FILE
+        bash <(curl -s -k 'https://raw.githubusercontent.com/daley7292/sh/refs/heads/main/xrayr.sh') -listenip $ip-name "$name-$index" -panel_type $panel_type -api_host $api_host -api_key $api_key -node_id $node_id -node_type $node_type -proxy_protocol $proxy_protocol -dns $dns -cert_mode $cert_mode -cert_domain $cert_domain -cert_file_url $cert_file_url -key_file_url $key_file_url -dns_provider $dns_provider -email $email -CLOUDFLARE_EMAIL $CLOUDFLARE_EMAIL -CLOUDFLARE_API_KEY_FILE $CLOUDFLARE_API_KEY_FILE
     done
 fi
