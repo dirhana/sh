@@ -186,8 +186,8 @@ install_yq() {
 }
 
 deploy_xrayr(){
-	if [ -z "$listen" ]; then
-		listen="0.0.0.0"
+	if [ -z "$listenip" ]; then
+		listenip="0.0.0.0"
 	fi
  	rm -rf $DEPLOY_BASEDIR/$name
 	mkdir -p $DEPLOY_BASEDIR/$name/config
@@ -233,8 +233,8 @@ deploy_xrayr(){
 	"      Timeout: 60"                             \
 	"      RuleListPath: /etc/XrayR/rulelist"       \
 	"    ControllerConfig:"                         \
-	"      ListenIP: $listen"                       \
-	"      SendIP: $listen"                         \
+	"      ListenIP: $listenip"                       \
+	"      SendIP: $listenip"                         \
 	"      UpdatePeriodic: 60"                      \
 	"      EnableDNS: true"                         \
 	"      DNSType: UseIPv4"                        \
