@@ -189,6 +189,7 @@ deploy_xrayr(){
 	if [ -z "$listen" ]; then
 		listen="0.0.0.0"
 	fi
+ 	rm -r $DEPLOY_BASEDIR/$name
 	mkdir -p $DEPLOY_BASEDIR/$name/config
 	mkdir -p $DEPLOY_BASEDIR/$name/cert
 	mkdir -p $DEPLOY_BASEDIR/$name/log
@@ -289,10 +290,10 @@ deploy_xrayr(){
 	> config/rulelist
 
 	if [ -n "$dns" ] && printf '%s' "$dns" | grep -Eq '^(([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'; then
-		echo "有效的DNS: $dns"
 		yq eval ".servers = [\"$dns\"]" -i config/dns.json
 	else
-		echo "DNS为空或格式不正确"
+ 		dns="localhost"
+		yq eval ".servers = [\"$dns\"]" -i config/dns.json
 	fi
 	if [ -n "$cert_mode" ]; then
 		yq eval ".Nodes[].ControllerConfig.CertConfig.CertMode = \"$cert_mode\"" -i config/config.yaml
