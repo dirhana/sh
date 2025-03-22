@@ -197,7 +197,7 @@ deploy_xrayr(){
 	printf "%s\n"                                   \
 	"services:"                                     \
 	"  XrayR:"                                      \
-	"    image: ghcr.io/xrayr-project/xrayr:latest" \
+	"    image: daley7292/xrayr:mater" \
 	"    container_name: $name"                     \
 	"    hostname: XrayR"                           \
 	"    restart: always"                           \
@@ -209,7 +209,7 @@ deploy_xrayr(){
 	> docker-compose.yml
 	printf "%s\n"                                   \
 	"Log:"                                          \
-	"  Level: error"                                 \
+	"  Level: error"                                \
 	""                                              \
 	"DnsConfigPath: /etc/XrayR/dns.json"            \
 	"RouteConfigPath: /etc/XrayR/route.json"        \
@@ -233,12 +233,11 @@ deploy_xrayr(){
 	"      Timeout: 60"                             \
 	"      RuleListPath: /etc/XrayR/rulelist"       \
 	"    ControllerConfig:"                         \
-	"      ListenIP: $listenip"                       \
-	"      SendIP: $listenip"                         \
+	"      ListenIP: $listenip"                     \
+	"      SendIP: $listenip"                       \
 	"      UpdatePeriodic: 60"                      \
 	"      EnableDNS: true"                         \
 	"      DNSType: UseIPv4"                        \
- 	"      DisableSniffing: true"                   \
 	"      EnableProxyProtocol: $proxy_protocol"    \
 	> config/config.yaml
 	printf "%s\n"                                   \
@@ -286,7 +285,7 @@ deploy_xrayr(){
 	"]"                                             \
 	> config/outbound.json
 	printf "%s\n"                                   \
-	"360"                                              \
+	"360"                                           \
 	> config/rulelist
 
 	if [ -n "$dns" ] && printf '%s' "$dns" | grep -Eq '^(([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]{1,2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'; then
