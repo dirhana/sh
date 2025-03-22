@@ -197,7 +197,7 @@ deploy_xrayr(){
 	printf "%s\n"                                   \
 	"services:"                                     \
 	"  XrayR:"                                      \
-	"    image: daley7292/xrayr:mater" \
+	"    image: daley7292/xrayr:master" \
 	"    container_name: $name"                     \
 	"    hostname: XrayR"                           \
 	"    restart: always"                           \
