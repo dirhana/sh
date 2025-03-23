@@ -1,23 +1,59 @@
 #!/bin/sh  # 使用 sh
-hostname_param=""
-ip_param=""
+ALLOWED_OPTIONS="d h ip"
+REQUIRED_OPTIONS=""
 
-while [[ "$#" -gt 0 ]]; do
-    case "$1" in
-        -h)
-            hostname_param="$2"
-            shift 2
-            ;;
-        -ip)
-            ip_param="$2"
-            shift 2
-            ;;
-        *)
-            echo "未知选项: $1"
-            exit 1
-            ;;
-    esac
-done
+usage() {
+    echo "用法: $0 [选项]"
+    echo "允许的选项:"
+    for opt in $ALLOWED_OPTIONS; do
+        echo "  -$opt <value>"
+    done
+    echo "必填的选项:"
+    for opt in $REQUIRED_OPTIONS; do
+        echo "  -$opt <value>"
+    done
+    exit 1
+}
+
+parse_options() {
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -*)
+                opt="${1#-}"
+                valid=0
+                for allowed in $ALLOWED_OPTIONS; do
+                    if [ "$opt" = "$allowed" ]; then
+                        valid=1
+                        break
+                    fi
+                done
+                if [ "$valid" -eq 0 ]; then
+                    echo "未知选项: $1"
+                    usage
+                fi
+
+                shift
+                if [ $# -eq 0 ]; then
+                    echo "选项 -$opt 缺少参数"
+                    usage
+                fi
+                eval "$opt=\$1"
+                ;;
+            *)
+                echo "无法识别的参数: $1"
+                usage
+                ;;
+        esac
+        shift
+    done
+    for req in $REQUIRED_OPTIONS; do
+        eval "value=\$$req"
+        if [ -z "$value" ]; then
+            echo "缺少必填选项: -$req"
+            usage
+        fi
+    done
+}
 
 check_debian() {
   if grep -qi "debian" /etc/os-release; then
@@ -59,6 +95,18 @@ systemctl enable systemd-timesyncd
 systemctl restart systemd-timesyncd
 }
 
+configure_resolved() {
+rm -rf /etc/resolv.conf
+find /etc/systemd/network/ -type f -exec sed -i '/^DNS=/d' {} +
+cat  <<EOF >/etc/systemd/resolved.conf
+[Resolve]
+DNS=1.1.1.1#cloudflare-dns.com
+FallbackDNS=1.0.0.1#cloudflare-dns.com
+DNSOverTLS=yes
+EOF
+ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+}
+
 configure_sysctl() {
 rm -rf /etc/sysctl.conf
 rm -rf /etc/sysctl.d/*
@@ -83,12 +131,6 @@ net.ipv6.conf.all.accept_ra=2
 net.ipv6.conf.all.autoconf=1
 net.core.default_qdisc=fq_codel
 net.ipv4.tcp_congestion_control=bbr
-net.netfilter.nf_conntrack_max = 65535
-net.netfilter.nf_conntrack_buckets = 16384
-net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 30
-net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30
-net.netfilter.nf_conntrack_tcp_timeout_close_wait = 15
-net.netfilter.nf_conntrack_tcp_timeout_established = 300
 vm.swappiness = 40
 EOF
 ln -s /etc/sysctl.d/99-custom.conf /etc/sysctl.conf
@@ -96,10 +138,6 @@ ln -s /etc/sysctl.d/99-custom.conf /etc/sysctl.conf
 total_memory=$(grep MemTotal /proc/meminfo | awk '{print $2}')
 total_memory_bytes=$((total_memory * 1024))
 total_memory_gb=$(awk "BEGIN {printf \"%.2f\", $total_memory / 1024 / 1024}")
-nf_conntrack_max=$((total_memory_bytes / 16384  ))
-nf_conntrack_buckets=$((nf_conntrack_max / 4))
-sed -i "s#.*net.netfilter.nf_conntrack_max = .*#net.netfilter.nf_conntrack_max = ${nf_conntrack_max}#g" /etc/sysctl.conf
-sed -i "s#.*net.netfilter.nf_conntrack_buckets = .*#net.netfilter.nf_conntrack_buckets = ${nf_conntrack_buckets}#g" /etc/sysctl.conf
 if [[ ${total_memory_gb//.*/} -lt 4 ]]; then    
   sed -i "s#.*net.ipv4.tcp_mem =.*#net.ipv4.tcp_mem =262144 786432 2097152#g" /etc/sysctl.conf
 elif [[ ${total_memory_gb//.*/} -ge 4 && ${total_memory_gb//.*/} -lt 7 ]]; then
@@ -154,7 +192,7 @@ systemctl enable vnstat.service --now
 }
 
 configure_syslog_ng() {
-if [ -z "$ip_param" ]; then
+if [ -z "$ip" ]; then
   echo "没有提供目标 IP 地址，跳过 syslog-ng 配置。"
   return 0  # 跳过该函数，不做任何操作
 fi
@@ -168,7 +206,7 @@ source s_local {
 };
 
 destination d_remote {
-    syslog("$ip_param" port(514) transport("udp"));
+    syslog("$ip" port(514) transport("udp"));
 };
 
 log { 
@@ -196,6 +234,10 @@ systemctl restart syslog-ng@default
 }
 
 install_docker() {
+if [ -z "$d" ]; then
+  echo "没有 -d 选项,跳过 docker 安装。"
+  return 0  # 跳过该函数，不做任何操作
+fi
 mkdir -p /etc/docker
 printf '{"log-driver": "syslog","log-opts": {"tag":"{{.Name}}"}}\n' > /etc/docker/daemon.json
 if command -v docker &>/dev/null; then
@@ -219,14 +261,29 @@ mkdir -p /etc/containerd && touch /etc/containerd/config.toml
 echo -e "[plugins]\n  [plugins.'io.containerd.internal.v1.opt']\n    path = '/var/lib/containerd'" | tee /etc/containerd/config.toml > /dev/null
 systemctl enable --now docker
 systemctl restart docker
+cat <<EOF >>/etc/sysctl.d/99-custom.conf
+net.netfilter.nf_conntrack_max = 65535
+net.netfilter.nf_conntrack_buckets = 16384
+net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 30
+net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30
+net.netfilter.nf_conntrack_tcp_timeout_close_wait = 15
+net.netfilter.nf_conntrack_tcp_timeout_established = 300
+EOF
+total_memory=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+total_memory_bytes=$((total_memory * 1024))
+total_memory_gb=$(awk "BEGIN {printf \"%.2f\", $total_memory / 1024 / 1024}")
+nf_conntrack_max=$((total_memory_bytes / 16384  ))
+nf_conntrack_buckets=$((nf_conntrack_max / 4))
+sed -i "s#.*net.netfilter.nf_conntrack_max = .*#net.netfilter.nf_conntrack_max = ${nf_conntrack_max}#g" /etc/sysctl.conf
+sed -i "s#.*net.netfilter.nf_conntrack_buckets = .*#net.netfilter.nf_conntrack_buckets = ${nf_conntrack_buckets}#g" /etc/sysctl.conf
 }
 
 
 set_hostname() {
-if [ -n "$hostname_param" ]; then
-  echo "设置主机名为: $hostname_param"
-  hostnamectl set-hostname "$hostname_param"
-  sed -i "s/127.0.1.1.*/127.0.1.1 $hostname_param/" /etc/hosts
+if [ -n "$h" ]; then
+  echo "设置主机名为: $h"
+  hostnamectl set-hostname "$h"
+  sed -i "s/127.0.1.1.*/127.0.1.1 $h/" /etc/hosts
 else
     echo "没有提供主机名参数，跳过主机名设置。"
 fi
@@ -287,6 +344,7 @@ else
   exit 1
 fi
 configure_timesync
+configure_resolved
 configure_sysctl
 configure_limits
 configure_systemd
@@ -296,5 +354,6 @@ configure_syslog_ng
 create_reboot_timer
 set_hostname
 }
-main "$@"
+parse_options "$@"
+main
 reboot
