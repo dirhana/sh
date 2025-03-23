@@ -207,6 +207,7 @@ deploy_xrayr(){
 	"      - ./cert:/etc/cert/"                     \
 	"      - ./log:/log"                            \
 	> docker-compose.yml
+ 
 	printf "%s\n"                                   \
 	"Log:"                                          \
 	"  Level: error"                                \
@@ -224,22 +225,30 @@ deploy_xrayr(){
 	"  BufferSize: 64"                              \
 	""                                              \
 	"Nodes:"                                        \
-	"  - PanelType: \"$panel_type\""                \
-	"    ApiConfig:"                                \
-	"      ApiHost: \"$api_host\""                  \
-	"      ApiKey: \"$api_key\""                    \
-	"      NodeID: $node_id"                        \
-	"      NodeType: $node_type"                    \
-	"      Timeout: 60"                             \
-	"      RuleListPath: /etc/XrayR/rulelist"       \
-	"    ControllerConfig:"                         \
-	"      ListenIP: $listenip"                     \
-	"      SendIP: $listenip"                       \
-	"      UpdatePeriodic: 60"                      \
-	"      EnableDNS: true"                         \
-	"      DNSType: UseIPv4"                        \
-	"      EnableProxyProtocol: $proxy_protocol"    \
 	> config/config.yaml
+
+	IFS=',' read -r -a node_ids <<< "$node_id"
+	for i in "${!node_ids[@]}"; do
+        node_index=$((i+1))
+        printf "%s\n"                                   \
+        "  - PanelType: \"$panel_type\""                \
+        "    ApiConfig:"                                \
+        "      ApiHost: \"$api_host\""                  \
+        "      ApiKey: \"$api_key\""                    \
+        "      NodeID: ${node_ids[$i]}"                 \
+        "      NodeType: $node_type"                    \
+        "      Timeout: 60"                             \
+        "      RuleListPath: /etc/XrayR/rulelist"       \
+        "    ControllerConfig:"                         \
+        "      ListenIP: $listenip"                     \
+        "      SendIP: $listenip"                       \
+        "      UpdatePeriodic: 60"                      \
+        "      EnableDNS: true"                         \
+        "      DNSType: UseIPv4"                        \
+        "      EnableProxyProtocol: $proxy_protocol"    \
+        >> config/config.yaml
+	done
+ 
 	printf "%s\n"                                   \
 	"{"                                             \
 	"  \"servers\": ["                              \
