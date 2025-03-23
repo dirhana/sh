@@ -1,5 +1,5 @@
 #!/bin/sh  # 使用 sh
-ALLOWED_OPTIONS="d h ip"
+ALLOWED_OPTIONS="d h ip dns"
 REQUIRED_OPTIONS=""
 
 usage() {
@@ -98,12 +98,25 @@ systemctl restart systemd-timesyncd
 configure_resolved() {
 rm -rf /etc/resolv.conf
 find /etc/systemd/network/ -type f -exec sed -i '/^DNS=/d' {} +
+if [ -n "$dns" ]; then
+  echo "设置DNS为: $dns"
+cat  <<EOF >/etc/systemd/resolved.conf
+[Resolve]
+DNS=$dns
+FallbackDNS=1.1.1.1 1.0.0.1
+EOF
+else
+    echo "没有提供DNS参数，设置DNS为 1.1.1.1。"
 cat  <<EOF >/etc/systemd/resolved.conf
 [Resolve]
 DNS=1.1.1.1#cloudflare-dns.com
 FallbackDNS=1.0.0.1#cloudflare-dns.com
 DNSOverTLS=yes
 EOF
+fi
+systemctl unmask systemd-resolved
+systemctl enable systemd-resolved
+systemctl restart systemd-resolved
 ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 }
 
