@@ -334,8 +334,8 @@ deploy_xrayr(){
   	if [ -n "$route_url" ]; then
 		wget -q $route_url -O $DEPLOY_BASEDIR/$name/config/route.json >/dev/null 2>&1
 	fi
-	wget -q https://github.com/v2fly/geoip/releases/latest/download/geoip.dat -O config/geoip.dat >/dev/null 2>&1
-	wget -q https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat -O config/geosite.dat >/dev/null 2>&1
+	wget -q -4 https://github.com/v2fly/geoip/releases/latest/download/geoip.dat -O config/geoip.dat >/dev/null 2>&1
+	wget -q -4 https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat -O config/geosite.dat >/dev/null 2>&1
 	docker compose down >/dev/null 2>&1
 	docker compose up -d
 }
