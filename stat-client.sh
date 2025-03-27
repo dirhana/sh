@@ -16,6 +16,7 @@ clear_workspace() {
     echo "Clearing workspace: ${WORKSPACE}"
     if [ -d "$WORKSPACE" ]; then
         rm -rf "${WORKSPACE:?}/*"
+        rm -rf "${WORKSPACE:?}/.server_status_sys_id"
     fi
     mkdir -p "$WORKSPACE"
     cd "$WORKSPACE" || exit
@@ -210,6 +211,7 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
+    .server_status_sys_id
     systemctl daemon-reload
     systemctl enable stat_client
     systemctl restart stat_client
