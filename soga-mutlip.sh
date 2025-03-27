@@ -54,7 +54,7 @@ parse_options() {
 }
 parse_options "$@"
 index=0
-ip_list=($(ip -4 addr show | awk '/inet / {print $2}' | cut -d'/' -f1 | grep -vE '^(127\.|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])|169\.254|^0\.|^255\.)'))
+ip_list=($(ip -4 addr show | awk '/inet / {print $2}' | cut -d'/' -f1 | grep -vE '^(127\.|172\.(1[6-9]|2[0-9]|3[0-1])|169\.254|^0\.|^255\.)'))
 if [[ -n "$start_index" && -n "$end_index" ]]; then
     for ip in "${ip_list[@]}"; do
         index=$((index + 1))
