@@ -50,7 +50,6 @@ check_and_install_package() {
     if ! command -v "$package" > /dev/null; then
         echo "$package is not installed. Installing $package..."
         
-        # 使用不同的包管理器安装
         if command -v apt-get > /dev/null; then
             apt-get update && apt-get install -y "$package"  # Debian/Ubuntu 系列
         elif command -v yum > /dev/null; then
