@@ -111,7 +111,6 @@ cat  <<EOF >/etc/systemd/resolved.conf
 [Resolve]
 DNS=1.1.1.1#cloudflare-dns.com
 FallbackDNS=1.0.0.1#cloudflare-dns.com
-DNSOverTLS=yes
 EOF
 fi
 systemctl unmask systemd-resolved
