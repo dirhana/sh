@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ALLOWED_OPTIONS="name webapi_url webapi_key server_type node_id soga_key routes_url cert_domain cert_mode dns_provider DNS_CF_Email DNS_CF_Key cert_url listen dns"
+ALLOWED_OPTIONS="name webapi_url webapi_key server_type node_id soga_key routes_url cert_domain cert_mode dns_provider DNS_CF_Email DNS_CF_Key cert_url listen dns force_close_ssl"
 REQUIRED_OPTIONS="name webapi_url webapi_key server_type soga_key node_id"
 
 usage() {
@@ -102,6 +102,7 @@ DeplaySoga() {
     "detect_packet=true" \
     "forbidden_bit_torrent=true" \
     "force_vmess_aead=true" \
+    "force_close_ssl=$force_close_ssl" \
     "geo_update_enable=true" \
     "ss_invalid_access_enable=true" \
     "ss_invalid_access_count=5" \
@@ -122,6 +123,9 @@ DeplaySoga() {
 
     if [ -z "$listen" ]; then
       sed -i '/^listen=$/d' .env
+    fi
+    if [ -z "$force_close_ssl" ]; then
+      sed -i '/^force_close_ssl=$/d' .env
     fi
     if [ ! -z "$cert_domain" ]; then
         echo "cert_domain=$cert_domain" >> .env
