@@ -80,9 +80,6 @@ DeplaySoga() {
     mkdir -p /opt/$name
     mkdir -p /opt/$name/config
     cd /opt/$name
-    if [ -z "$dns" ]; then
-      dns=https://8.8.8.8/dns-query
-    fi
     printf "%s\n" \
     "log_level=debug" \
     "type=v2board" \
@@ -126,6 +123,9 @@ DeplaySoga() {
     fi
     if [ -z "$force_close_ssl" ]; then
       sed -i '/^force_close_ssl=$/d' .env
+    fi
+    if [ -z "$dns" ]; then
+      sed -i '/^default_dns=$/d' .env
     fi
     if [ ! -z "$cert_domain" ]; then
         echo "cert_domain=$cert_domain" >> .env
