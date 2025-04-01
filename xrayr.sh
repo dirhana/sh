@@ -246,7 +246,7 @@ deploy_xrayr(){
         "      EnableDNS: true"                         \
         "      DNSType: UseIPv4"                        \
         "      EnableProxyProtocol: $proxy_protocol"    \
-	"      AutoSpeedLimitConfig:                    \
+	"      AutoSpeedLimitConfig:"                   \
         "        Limit: 200"                            \
 	"        WarnTimes: 300"                        \
         "        LimitSpeed: 100"                       \
