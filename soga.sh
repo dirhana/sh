@@ -169,9 +169,6 @@ services:
     container_name: ${name}
     restart: always
     network_mode: host
-    dns:
-      - 1.1.1.1
-      - 1.0.0.1
     env_file:
       - .env
     volumes:
