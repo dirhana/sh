@@ -247,10 +247,10 @@ deploy_xrayr(){
         "      DNSType: UseIPv4"                        \
         "      EnableProxyProtocol: $proxy_protocol"    \
 	"      AutoSpeedLimitConfig:                    \
-        "        Limit: 200                             \
-	"        WarnTimes: 300                         \
-        "        LimitSpeed: 100                        \
-	"        LimitDuration: 1500                    \
+        "        Limit: 200"                            \
+	"        WarnTimes: 300"                        \
+        "        LimitSpeed: 100"                       \
+	"        LimitDuration: 1500"                   \
         >> config/config.yaml
 	done
  
