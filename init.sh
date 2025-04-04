@@ -141,7 +141,7 @@ net.ipv4.ping_group_range = 0 2147483647
 net.ipv4.ip_local_port_range = 10000 49999
 net.ipv6.conf.all.accept_ra=2
 net.ipv6.conf.all.autoconf=1
-net.core.default_qdisc=fq_codel
+net.core.default_qdisc=fq
 net.ipv4.tcp_congestion_control=bbr
 vm.swappiness = 40
 EOF
