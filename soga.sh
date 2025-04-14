@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ALLOWED_OPTIONS="type name webapi_url webapi_key server_type node_id soga_key routes_url cert_domain cert_mode dns_provider DNS_CF_Email DNS_CF_Key cert_url listen dns force_close_ssl block_list_url redis_enable redis_addr redis_password redis_db conn_limit_expiry dy_limit_enable dy_limit_duration dy_limit_trigger_time dy_limit_trigger_speed dy_limit_speed dy_limit_time dy_limit_white_user_id user_conn_limit user_tcp_limit"
+ALLOWED_OPTIONS="type name webapi_url webapi_key server_type node_id soga_key routes_url cert_domain cert_mode dns_provider DNS_CF_Email DNS_CF_Key cert_url listen dns force_close_ssl block_list_url redis_enable redis_addr redis_password redis_db conn_limit_expiry dy_limit_enable dy_limit_duration dy_limit_trigger_time dy_limit_trigger_speed dy_limit_speed dy_limit_time dy_limit_white_user_id user_conn_limit user_tcp_limit auto_out_ip"
 REQUIRED_OPTIONS="type name webapi_url webapi_key server_type soga_key node_id"
 
 usage() {
@@ -121,6 +121,11 @@ DeplaySoga() {
 	if [ ! -z "$dns" ]; then
 		sed -i "/^dns=/d" .env
 		echo "dns=$dns" >>.env
+	fi
+
+	if [ ! -z "$auto_out_ip" ]; then
+		sed -i "/^auto_out_ip=/d" .env
+		echo "auto_out_ip=$auto_out_ip" >>.env
 	fi
 
 	if [ ! -z "$force_close_ssl" ]; then
