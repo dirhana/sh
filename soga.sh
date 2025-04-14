@@ -88,7 +88,6 @@ DeplaySoga() {
 		"soga_key=$soga_key" \
 		"server_type=$server_type" \
 		"node_id=$node_id" \
-		"auto_out_ip=true" \
 		"check_interval=15" \
 		"proxy_protocol=true" \
 		"udp_proxy_protocol=true" \
