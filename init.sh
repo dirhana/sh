@@ -80,6 +80,7 @@ apt update && apt upgrade -y && apt autoremove -y && apt install -y bc gpg curl 
 }
 
 install_packages_arch() {
+pacman-key --init && pacman-key --populate archlinux
 pacman -Syu --noconfirm && pacman -S --noconfirm bc curl wget dnsutils net-tools bash-completion vim nftables vnstat syslog-ng python3 qemu-guest-agent
 }
 
