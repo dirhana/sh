@@ -237,7 +237,9 @@ DeplaySoga() {
 		echo "cert_file=/etc/soga/cert.crt" >>.env
 		echo "key_file=/etc/soga/cert.key" >>.env
 	fi
-
+	echo "下载 geoip.dat,geosite.dat 文件..."
+ 	wget -q https://github.com/v2fly/geoip/releases/latest/download/geoip.dat -O config/geoip.dat
+ 	wget -q https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat -O config/geosite.dat
 	if [ ! -z "$routes_url" ]; then
 		echo "下载 routes.toml 文件..."
 		curl -fsSL "$routes_url" -o /opt/$name/config/routes.toml
