@@ -80,7 +80,7 @@ DeplaySoga() {
 	mkdir -p /opt/$name/config
 	cd /opt/$name
 	printf "%s\n" \
-		"log_level=debug" \
+		"log_level=$log_level" \
 		"type=$type" \
 		"api=webapi" \
 		"webapi_url=$webapi_url" \
@@ -111,12 +111,7 @@ DeplaySoga() {
 		"dy_limit_speed=50" \
 		"dy_limit_time=1800" \
 		>.env
-
-	if [ ! -z "$log_level" ]; then
-		sed -i "/^log_level=/d" .env
-		echo "log_level=$log_level" >>.env
-	fi
-
+  
 	if [ ! -z "$listen" ]; then
 		sed -i "/^listen=/d" .env
 		echo "listen=$listen" >>.env
