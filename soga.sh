@@ -3,9 +3,6 @@
 ALLOWED_OPTIONS="log_level type name webapi_url webapi_key server_type node_id soga_key routes_url cert_domain cert_mode dns_provider DNS_CF_Email DNS_CF_Key cert_url listen dns force_close_ssl block_list_url redis_enable redis_addr redis_password redis_db conn_limit_expiry dy_limit_enable dy_limit_duration dy_limit_trigger_time dy_limit_trigger_speed dy_limit_speed dy_limit_time dy_limit_white_user_id user_conn_limit user_tcp_limit auto_out_ip"
 REQUIRED_OPTIONS="type name webapi_url webapi_key server_type soga_key node_id"
 
-log_level=debug
-listen=0.0.0.0
-
 usage() {
 	echo "用法: $0 [选项]"
 	echo "允许的选项:"
@@ -92,6 +89,9 @@ DeplaySoga() {
 		"server_type=$server_type" \
 		"node_id=$node_id" \
 		"listen=$listen" \
+		"auto_out_ip=$auto_out_ip" \
+		"default_dns=$dns" \
+		"force_close_ssl=$force_close_ssl" \
 		"check_interval=15" \
 		"proxy_protocol=true" \
 		"udp_proxy_protocol=true" \
@@ -109,27 +109,18 @@ DeplaySoga() {
 		"vmess_aead_invalid_access_duration=30" \
 		"vmess_aead_invalid_access_forbidden_time=120"
 		>.env
-  
-	if [ ! -z "$listen" ]; then
-		sed -i "/^listen=/d" .env
-		echo "listen=$listen" >>.env
+	if [ -z "$log_level" ]; then
+		sed -i "/^log_level=/d" .env
 	fi
 
-	if [ ! -z "$dns" ]; then
-		sed -i "/^dns=/d" .env
-		echo "dns=$dns" >>.env
+	if [ -z "$dns" ]; then
+		sed -i "/^default_dns=/d" .env
 	fi
 
-	if [ ! -z "$auto_out_ip" ]; then
-		sed -i "/^auto_out_ip=/d" .env
-		echo "auto_out_ip=$auto_out_ip" >>.env
+	if [ -z "$auto_out_ip" ]; then
+  		sed -i "s/^auto_out_ip=.*/auto_out_ip=true/" .env
 	fi
-
-	if [ ! -z "$force_close_ssl" ]; then
-		sed -i "/^force_close_ssl=/d" .env
-		echo "force_close_ssl=$force_close_ssl" >>.env
-	fi
-
+ 
 	if [ ! -z "$block_list_url" ]; then
 		sed -i "/^block_list_url=/d" .env
 		echo "block_list_url=$block_list_url" >>.env
