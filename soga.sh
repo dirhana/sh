@@ -112,7 +112,11 @@ DeplaySoga() {
 	if [ -z "$log_level" ]; then
 		sed -i "/^log_level=/d" .env
 	fi
-
+ 
+	if [ -z "$listen" ]; then
+		sed -i "/^listen=/d" .env
+	fi
+ 
 	if [ -z "$dns" ]; then
 		sed -i "/^default_dns=/d" .env
 	fi
