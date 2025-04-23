@@ -103,13 +103,7 @@ DeplaySoga() {
 		"vmess_aead_invalid_access_enable=true" \
 		"vmess_aead_invalid_access_count=5" \
 		"vmess_aead_invalid_access_duration=30" \
-		"vmess_aead_invalid_access_forbidden_time=120" \
-		"dy_limit_enable=true" \
-		"dy_limit_duration=21:00-24:00,00:00-02:00" \
-		"dy_limit_trigger_time=120" \
-		"dy_limit_trigger_speed=150" \
-		"dy_limit_speed=50" \
-		"dy_limit_time=1800" \
+		"vmess_aead_invalid_access_forbidden_time=120"
 		>.env
   
 	if [ ! -z "$listen" ]; then
