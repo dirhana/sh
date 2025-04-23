@@ -1,7 +1,10 @@
 #!/bin/bash
 
 ALLOWED_OPTIONS="log_level type name webapi_url webapi_key server_type node_id soga_key routes_url cert_domain cert_mode dns_provider DNS_CF_Email DNS_CF_Key cert_url listen dns force_close_ssl block_list_url redis_enable redis_addr redis_password redis_db conn_limit_expiry dy_limit_enable dy_limit_duration dy_limit_trigger_time dy_limit_trigger_speed dy_limit_speed dy_limit_time dy_limit_white_user_id user_conn_limit user_tcp_limit auto_out_ip"
-REQUIRED_OPTIONS="log_level type name webapi_url webapi_key server_type soga_key node_id"
+REQUIRED_OPTIONS="type name webapi_url webapi_key server_type soga_key node_id"
+
+log_level=debug
+listen=0.0.0.0
 
 usage() {
 	echo "用法: $0 [选项]"
@@ -14,15 +17,6 @@ usage() {
 		echo "  -$opt <value>"
 	done
 	exit 1
-}
-
-set_default_value() {
-	local var_name="$1"
-	local default_val="$2"
-	eval "current_val=\${$var_name}"
-	if [ -z "$current_val" ]; then
-		eval "$var_name=\"$default_val\""
-	fi
 }
 
 parse_options() {
@@ -97,6 +91,7 @@ DeplaySoga() {
 		"soga_key=$soga_key" \
 		"server_type=$server_type" \
 		"node_id=$node_id" \
+		"listen=$listen" \
 		"check_interval=15" \
 		"proxy_protocol=true" \
 		"udp_proxy_protocol=true" \
