@@ -85,6 +85,7 @@ pacman -Syu --noconfirm && pacman -S --noconfirm bc curl wget dnsutils net-tools
 }
 
 configure_timesync() {
+timedatectl set-timezone Asia/Shanghai
 rm -f /etc/systemd/timesyncd.conf
 cat << EOF > /etc/systemd/timesyncd.conf
 [Time]
