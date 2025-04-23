@@ -16,6 +16,15 @@ usage() {
 	exit 1
 }
 
+set_default_value() {
+	local var_name="$1"
+	local default_val="$2"
+	eval "current_val=\${$var_name}"
+	if [ -z "$current_val" ]; then
+		eval "$var_name=\"$default_val\""
+	fi
+}
+
 parse_options() {
 	while [ $# -gt 0 ]; do
 		case "$1" in
