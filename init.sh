@@ -365,7 +365,6 @@ configure_systemd
 enable_vnstat
 install_docker
 configure_syslog_ng
-create_reboot_timer
 set_hostname
 }
 parse_options "$@"
