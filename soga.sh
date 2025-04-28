@@ -108,6 +108,8 @@ DeplaySoga() {
 		"vmess_aead_invalid_access_count=5" \
 		"vmess_aead_invalid_access_duration=30" \
 		"vmess_aead_invalid_access_forbidden_time=120" \
+  		"submit_alive_ip_min_traffic=64" \
+  		"submit_traffic_min_traffic=64" \
 		>.env
 	if [ -z "$log_level" ]; then
 		sed -i "/^log_level=/d" .env
