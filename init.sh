@@ -127,6 +127,7 @@ rm -rf /etc/sysctl.d/*
 cat <<EOF >/etc/sysctl.d/99-custom.conf
 fs.file-max = 1000000
 fs.inotify.max_user_instances = 131072
+net.core.somaxconn=65535
 net.ipv4.conf.all.forwarding = 1
 net.ipv4.ip_forward = 1
 net.ipv4.tcp_max_syn_backlog = 4194304
@@ -139,6 +140,10 @@ net.ipv4.tcp_synack_retries = 3
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_tw_reuse = 1
 net.ipv4.tcp_timestamps = 0
+net.ipv4.tcp_fin_timeout=15
+net.ipv4.tcp_keepalive_time=30
+net.ipv4.tcp_keepalive_intvl=15
+net.ipv4.tcp_keepalive_probes=5
 net.ipv4.tcp_wmem = 4096 16384 33554432
 net.ipv4.ping_group_range = 0 2147483647
 net.ipv4.ip_local_port_range = 10000 49999
@@ -146,6 +151,8 @@ net.ipv6.conf.all.accept_ra=2
 net.ipv6.conf.all.autoconf=1
 net.core.default_qdisc=fq
 net.ipv4.tcp_congestion_control=bbr
+net.ipv4.tcp_low_latency=1
+net.ipv4.route.flush=1
 vm.swappiness = 40
 EOF
 ln -s /etc/sysctl.d/99-custom.conf /etc/sysctl.conf
