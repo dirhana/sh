@@ -106,6 +106,7 @@ cat  <<EOF >/etc/systemd/resolved.conf
 [Resolve]
 DNS=$dns
 FallbackDNS=1.1.1.1 1.0.0.1
+Cache=no
 EOF
 else
     echo "没有提供DNS参数，设置DNS为 1.1.1.1。"
