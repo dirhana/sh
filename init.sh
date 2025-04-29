@@ -138,6 +138,7 @@ net.ipv4.tcp_syn_retries = 3
 net.ipv4.tcp_synack_retries = 3
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_timestamps = 0
 net.ipv4.tcp_wmem = 4096 16384 33554432
 net.ipv4.ping_group_range = 0 2147483647
 net.ipv4.ip_local_port_range = 10000 49999
