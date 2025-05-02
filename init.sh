@@ -105,15 +105,15 @@ if [ -n "$dns" ]; then
 cat  <<EOF >/etc/systemd/resolved.conf
 [Resolve]
 DNS=$dns
-FallbackDNS=1.1.1.1 1.0.0.1
+FallbackDNS=8.8.8.8
 Cache=no
 EOF
 else
-    echo "没有提供DNS参数，设置DNS为 1.1.1.1。"
+    echo "没有提供DNS参数，设置DNS为 8.8.8.8"
 cat  <<EOF >/etc/systemd/resolved.conf
 [Resolve]
-DNS=1.1.1.1#cloudflare-dns.com
-FallbackDNS=1.0.0.1#cloudflare-dns.com
+DNS=8.8.8.8
+FallbackDNS=8.8.4.4
 EOF
 fi
 systemctl unmask systemd-resolved
