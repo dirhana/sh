@@ -131,7 +131,7 @@ fs.file-max = 1000000
 fs.inotify.max_user_instances = 131072
 
 # 内核网络参数优化
-net.core.default_qdisc = fq
+net.core.default_qdisc = fq_pie
 net.core.somaxconn = 65535
 
 # IPv4 基础网络参数
