@@ -258,7 +258,12 @@ DeplaySoga() {
 	  "    env_file:" \
 	  "      - .env" \
 	  "    volumes:" \
-	  "      - \"./config:/etc/soga/\"" > docker-compose.yaml
+	  "      - \"./config:/etc/soga/\"" \
+	  "    logging:" \
+	  "      driver: json-file" \
+	  "      options:" \
+	  "        max-size: \"10m\"" \
+	  "        max-file: \"1\"" > docker-compose.yaml
 	if command -v docker-compose &>/dev/null; then
 		docker-compose up -d --pull always
 	else
